@@ -1,0 +1,25 @@
+
+body {
+    font-family: "MicrogrammaDEEBolExt";
+}
+
+#numpad {
+    display: block;
+    box-sizing: border-box;
+    width: 40%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    border: 0.5px dotted gray;
+}
+
+.numrow {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.numbutton {
+    border: 1px solid blue;
+    border-radius: 20%;
+    padding: 10%;
+    margin: 3px;
+}
