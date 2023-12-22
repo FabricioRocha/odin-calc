@@ -3,9 +3,41 @@ body {
     font-family: "MicrogrammaDEEBolExt";
 }
 
+#calc {
+    display: block;
+    box-sizing: border-box;
+    width: 60%;
+    margin: auto 20%;
+    border: 1px solid red;
+    border-radius: 3%;
+    padding: 8px;
+    background-color: rgb(168, 34, 63)
+    
+}
+
+#display {
+    display: block;
+    margin: 0% 2% 10px;
+    padding: 0.2%;
+    min-height: 48px;
+    width: 92%;
+    border: 4px darkgray;
+    border-style:inset;
+    background-color: black;
+    color:#cc4312;
+    text-align: end;
+    font-family: "OPTICalculator";
+    font-size: 42px;
+}
+
+#pads {
+    display: flex;
+}
+
 #numpad {
     display: block;
     box-sizing: border-box;
+    margin: 0 2%;
     width: 40%;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -18,8 +50,35 @@ body {
 }
 
 .numbutton {
-    border: 1px solid blue;
+    background-color: #faebe6;
+    border: 2px outset rgb(235, 208, 208);
     border-radius: 20%;
     padding: 10%;
     margin: 3px;
+}
+
+#oppad {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: 0 0.1%;
+    min-width: 15%;
+}
+
+.opbutton {
+    border: 2px outset darkslategray;
+    border-radius: 8px;
+    padding: 10%;
+    margin: 3px;
+    background-color: slategray;
+    color:blanchedalmond;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 100%;
+    font-weight: bold;
+}
+
+.result {
+    min-height: 4em;
+    padding: 10% 0;
 }

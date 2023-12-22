@@ -1,8 +1,24 @@
 
 /*
     - Number buttons pressed:
+        - if last pressed button was an opButton, clear display
+        - if button is 0, current display is 0 and no operation is pending, do nothing
+        - if display still has space, append number
+
+    - "=" is pressed:
+        - if an operation is pending:
+            - get current display content as second operand
+            - perform operation
+            - update display with the result
+        - else: just repeat the current display content
+        - clear flag of pending operation
+
     - Operation buttons pressed:
-        - Get the visor value
+        - if an operation is pending: do the same of "="
+        - update/raise the flag of pending operation
+        - Store the updated display content as operand 1
+    
+
 
 */
 
@@ -39,15 +55,37 @@ function numButtonsCreate() {
     numrow.appendChild(but);
 
     numpad.appendChild(numrow);
+
+    numButtonsBind();
 }
 
 numButtonsCreate();
 
+function numButtonsBind(){
+    let numpad = document.getElementById("numpad");
+    numpad.childNodes.forEach(button => {
+        button.addEventListener(numButtonClicked)
+    });
+}
+
+function numButtonClicked(but) {
+    let val = but.innerText;
+}
+
+function displayAppend(digit) {
+    let display = document.getElementById("display");
+    let content = display.innerText;
+    content+=String(digit);
+    display.innerText = content;
+}
 
 /*
     opButtonsCreate
         Creates the operation buttons in the DOM
 */
+
+
+
 
 
 // The calculator back-end **********************
@@ -59,7 +97,13 @@ function Calculator() {
     this['/'] = (val1, val2) => val2 == 0 ? 'Error' : val1 / val2;
 
     this.accum = 0;
+    this.pendingOp = "";
     
+    this.setPendingOp = (op) => this.pendingOp = op;
+    this.getPendingOp = () => this.pendingOp;
+    this.clearPendingOp = () => this.pendingOp = "";
+
+    // calc - perform operation
     this.calc = function(val1, op, val2) {
         let v1 = Number(val1);
         let v2 = Number(val2);
