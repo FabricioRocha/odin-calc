@@ -62,21 +62,29 @@ function numButtonsCreate() {
 numButtonsCreate();
 
 function numButtonsBind(){
-    let numpad = document.getElementById("numpad");
-    numpad.childNodes.forEach(button => {
-        button.addEventListener(numButtonClicked)
+    let buttons = document.querySelectorAll(".numbutton");
+    buttons.forEach(button => {
+        button.addEventListener("click", numButtonClicked);
     });
 }
 
-function numButtonClicked(but) {
-    let val = but.innerText;
+function numButtonClicked(evt) {
+    /*
+    let button = evt.target;
+    let val = button.innerText;
+    displayAppend(val);
+    */
+    displayAppend(evt.target.innerText);
+    return;
 }
 
 function displayAppend(digit) {
     let display = document.getElementById("display");
     let content = display.innerText;
-    content+=String(digit);
+    if (content === "0") content = digit;
+        else content+=String(digit);
     display.innerText = content;
+    return;
 }
 
 /*
