@@ -83,13 +83,17 @@ function displayAppend(digit) {
     let content = display.innerText;
     if (content === "0") content = digit;
         else content+=String(digit);
+    
+    // If the new digit causes a display overflow, cut it out
     display.innerText = content;
+    if (display.scrollWidth > display.clientWidth) {
+        display.innerText = content.slice(0, content.length - 1);
+    }
     return;
 }
 
 /*
-    opButtonsCreate
-        Creates the operation buttons in the DOM
+    opControlButtonsBind
 */
 
 

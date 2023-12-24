@@ -16,28 +16,51 @@ body {
 }
 
 #display {
-    display: block;
+    display: inline-block;
     margin: 0% 2% 10px;
-    padding: 0.2%;
+    padding: 0.5%;
     min-height: 48px;
+    height: 30%;
     width: 92%;
     border: 4px darkgray;
     border-style:inset;
     background-color: black;
     color:#cc4312;
-    text-align: end;
-    font-family: "OPTICalculator";
-    font-size: 42px;
+    text-align: right;
+    vertical-align: middle;
+    font-family: "Segment7Standard";
+    font-size: 3em;
+}
+
+#controls {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-start;
+    margin: 0.1% 2%;
+}
+
+#controls button {
+    width: 48px;
+    flex: 0 1 1;
+    align-items: center;
+    margin: 0.2em 0;
+    background-color: slategray;
+    border-radius: 6px;
+    border-color: gray;
+    border-style: outset;
+    font-family: inherit;
 }
 
 #pads {
     display: flex;
+    margin: 0 2%;
+    justify-content: space-evenly;
+    gap: 0.2%;
 }
 
 #numpad {
     display: block;
     box-sizing: border-box;
-    margin: 0 2%;
     width: 40%;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -61,7 +84,7 @@ body {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    margin: 0 0.1%;
+    margin: 0 0.2%;
     min-width: 15%;
 }
 
