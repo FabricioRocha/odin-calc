@@ -8,8 +8,11 @@ body {
     box-sizing: border-box;
     width: 60%;
     margin: auto 20%;
-    border: 1px solid red;
+    border-width: 14px;
+    border-top: 24px;
     border-radius: 3%;
+    border-style: outset;
+    border-color: rgb(102, 19, 19);
     padding: 8px;
     background-color: rgb(168, 34, 63)
     
