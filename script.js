@@ -81,16 +81,40 @@ function numButtonClicked(evt) {
 function displayAppend(digit) {
     let display = document.getElementById("display");
     let content = display.innerText;
-    if (content === "0") content = digit;
-        else content+=String(digit);
+    if (digit !== "." && content === "0") {
+        content = digit;
+    } 
+    else {
+        if (!(digit === "." && content.includes(".")))
+            content+=String(digit);
+    }
+    
+    display.innerText = content;
     
     // If the new digit causes a display overflow, cut it out
-    display.innerText = content;
     if (display.scrollWidth > display.clientWidth) {
         display.innerText = content.slice(0, content.length - 1);
     }
     return;
 }
+
+function displayClear() {
+    let display = document.getElementById("display");
+    display.innerText = "0";
+    return;
+}
+
+function displayClearEntry() {
+    let display = document.getElementById("display");
+    let content = display.innerText;
+    if (content.length > 1) {
+        display.innerText = content.slice(0, content.length - 1);
+    } else {
+        display.innerText = "0";
+    }
+    return;
+}
+
 
 /*
     opControlButtonsBind
