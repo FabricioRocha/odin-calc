@@ -26,7 +26,7 @@
 var cal = new Calculator();
 numButtonsCreate();
 opButtonsBind();
-
+window.addEventListener("resize", displayResized);
 
 
 /*
@@ -114,6 +114,13 @@ function displayAppend(digit) {
     return;
 }
 
+function displayPrint(val) {
+    displayClear();
+    let digits = String(val).split("");
+    for (let i=0; i < digits.length; i++) displayAppend(digits[i]);
+}
+
+
 function displayClear() {
     let display = document.getElementById("display");
     display.innerText = "0";
@@ -165,7 +172,7 @@ function opButtonClicked (evt) {
 
     if (pending) {
         let res = cal.calc(cal.accum, pending, curval);
-        display.innerText = res;
+        displayPrint(res);
         if (op === "=") {
             cal.clearPendingOp();
         } else {
@@ -181,6 +188,10 @@ function opButtonClicked (evt) {
     cal.setLastButtonType("op");
 }
 
+
+function displayResized() {
+    displayPrint(cal.accum);
+}
 
 
 // The calculator back-end **********************
