@@ -22,6 +22,13 @@
 
 */
 
+// Init - global  elements
+var cal = new Calculator();
+numButtonsCreate();
+opButtonsBind();
+
+
+
 /*
     numButtonsCreate
         Creates the numeric buttons in the DOM
@@ -59,7 +66,7 @@ function numButtonsCreate() {
     numButtonsBind();
 }
 
-numButtonsCreate();
+
 
 function numButtonsBind(){
     let buttons = document.querySelectorAll(".numbutton");
@@ -68,13 +75,22 @@ function numButtonsBind(){
     });
 }
 
+function controlClearClicked() {
+    cal.clearPendingOp();
+    cal.setLastButtonType("");
+    cal.accum = 0;
+    displayClear();
+}
+
 function numButtonClicked(evt) {
     /*
     let button = evt.target;
     let val = button.innerText;
     displayAppend(val);
     */
+    if (cal.getLastButtonType() !== "num") displayClear();
     displayAppend(evt.target.innerText);
+    cal.setLastButtonType("num");
     return;
 }
 
@@ -117,10 +133,53 @@ function displayClearEntry() {
 
 
 /*
-    opControlButtonsBind
+    opButtonsBind
 */
+function opButtonsBind() {
+    let buts = document.querySelectorAll(".opbutton");
+    buts.forEach((but) => {
+        but.addEventListener("click", opButtonClicked);
+    });
+}
 
+/*
+    - "=" is pressed:
+        - if an operation is pending:
+            - get current display content as second operand
+            - perform operation
+            - update display with the result
+        - else: just repeat the current display content
+        - clear flag of pending operation
 
+    - Operation buttons pressed:
+        - if an operation is pending: do the same of "="
+        - update/raise the flag of pending operation
+        - Store the updated display content as operand 1
+    
+*/
+function opButtonClicked (evt) {
+    let op = evt.target.getAttribute("name");
+    let display = document.getElementById("display");
+    let curval = Number(display.innerText);
+    let pending = cal.getPendingOp();
+
+    if (pending) {
+        let res = cal.calc(cal.accum, pending, curval);
+        display.innerText = res;
+        if (op === "=") {
+            cal.clearPendingOp();
+        } else {
+            cal.accum = res;
+            cal.setPendingOp(op);
+        }
+    } else {
+        if (op !== "=") {
+            cal.setPendingOp(op);
+            cal.accum = curval;
+        }
+    }
+    cal.setLastButtonType("op");
+}
 
 
 
@@ -134,10 +193,14 @@ function Calculator() {
 
     this.accum = 0;
     this.pendingOp = "";
+    this.lastButtonType = "";
     
     this.setPendingOp = (op) => this.pendingOp = op;
     this.getPendingOp = () => this.pendingOp;
     this.clearPendingOp = () => this.pendingOp = "";
+
+    this.getLastButtonType = () => this.lastButtonType;
+    this.setLastButtonType = (bt) => this.lastButtonType = bt;
 
     // calc - perform operation
     this.calc = function(val1, op, val2) {

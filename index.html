@@ -17,7 +17,7 @@
             0
         </section>
         <section id="controls">
-            <button name="clear" type="reset" onclick="displayClear()">C</button>
+            <button name="clear" type="reset" onclick="controlClearClicked()">C</button>
             <button name="bkspc" type="button" onclick="displayClearEntry()">⌫</button>
         </section>
         <div id="pads">
@@ -28,11 +28,11 @@
                 
             </section>
             <section id="oppad">
-                <div class="opbutton">+</div>
-                <div class="opbutton">-</div>
-                <div class="opbutton">*</div>
-                <div class="opbutton">/</div>
-                <div class="opbutton result">=</div>
+                <div class="opbutton" name="+">+</div>
+                <div class="opbutton" name="-">-</div>
+                <div class="opbutton" name="*">*</div>
+                <div class="opbutton" name="/">/</div>
+                <div class="opbutton result" name="=">=</div>
             </section>
         </div>
     </article>
