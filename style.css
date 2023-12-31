@@ -67,7 +67,6 @@ body {
     width: 40%;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    border: 0.5px dotted gray;
 }
 
 .numrow {
