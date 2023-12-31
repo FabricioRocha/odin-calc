@@ -26,6 +26,7 @@
 var cal = new Calculator();
 numButtonsCreate();
 opButtonsBind();
+keyboardBind();
 window.addEventListener("resize", displayResized);
 
 
@@ -66,7 +67,47 @@ function numButtonsCreate() {
     numButtonsBind();
 }
 
+function keyboardBind() {
+    document.addEventListener("keydown", (evt) => {
+        evt.preventDefault();
+        let key = evt.key;
+        let newev = new Event("click");
+        
+        if (key.match( /[0-9\.,]/ )) {
+            if (key === ",") key = ".";
+            let buts = document.querySelectorAll(".numbutton");
+            for(let i = 0; i < buts.length; i++) {
+                if (buts[i].innerText == key) {
+                    buts[i].dispatchEvent(newev);
+                    break;
+                }
+            }
+        }
+        
+        if (key.match( /[\/\*\-\+]/ ) ) {
+            let buts = document.querySelectorAll(".opbutton");
+            for(let i = 0; i < buts.length; i++) {
+                if (buts[i].getAttribute("name") === key) {
+                    buts[i].dispatchEvent(newev);
+                    break;
+                }
+            }
+        }
 
+        if (key === 'Backspace') {
+            document.querySelector("[name='bkspc']").dispatchEvent(newev);
+        }
+
+        if (key === "C" || key === "c") {
+            document.querySelector("[name='clear']").dispatchEvent(newev);
+        }
+
+        if (key === "Enter" ) {
+            document.querySelector("[name='=']").dispatchEvent(newev);
+        }
+ 
+    });
+}
 
 function numButtonsBind(){
     let buttons = document.querySelectorAll(".numbutton");
@@ -150,41 +191,70 @@ function opButtonsBind() {
 }
 
 /*
-    - "=" is pressed:
-        - if an operation is pending:
-            - get current display content as second operand
+    opButtonClicked()
+
+    This is where the operation logic resides.. so far. It started from
+    the following ideas:
+
+        - "=" is pressed:
+            - if an operation is pending:
+                - get current display content as second operand
+                - perform operation
+                - update display with the result
+            - else: just repeat the current display content
+            - clear flag of pending operation
+
+        - Operation buttons pressed:
+            - if an operation is pending: do the same of "="
+            - update/raise the flag of pending operation
+            - Store the updated display content as operand 1
+    
+    The repeating procedure for a pending operation indicated a
+    violation of the DRY principle, so a preliminar refactoring
+    led to:
+        
+        - get current display content
+        - if an operation is pending (first operand and operator present):
             - perform operation
             - update display with the result
-        - else: just repeat the current display content
-        - clear flag of pending operation
-
-    - Operation buttons pressed:
-        - if an operation is pending: do the same of "="
-        - update/raise the flag of pending operation
-        - Store the updated display content as operand 1
+            - if operation button was "=":
+                - clear the pending operation status
+            - else (another operation started):
+                - store current result in accumulator as first operand
+                - update the pending operation
+        - else (no pending operation waiting for operand):
+            - if button pressed was an operation:
+                - store current display content as first operand
+                - update the pending operation
     
+    Boils down to:
+        - Get current display value (curval)
+        - If an operation was pending, curval is its second operand:
+            - perform pending calculation
+        - If pressed button was "=":
+            - clear pending operation status
+        - Else, other operation started:
+            - store curval as first operand
+            - store the pressed button as the new pending operation
+         
 */
 function opButtonClicked (evt) {
     let op = evt.target.getAttribute("name");
     let display = document.getElementById("display");
-    let curval = Number(display.innerText);
+    let dispval = Number(display.innerText);
     let pending = cal.getPendingOp();
 
-    if (pending) {
-        let res = cal.calc(cal.accum, pending, curval);
-        displayPrint(res);
-        if (op === "=") {
-            cal.clearPendingOp();
-        } else {
-            cal.accum = res;
-            cal.setPendingOp(op);
-        }
+    let res = (pending) ? cal.calc(cal.accum, pending, dispval) : dispval;
+
+    if (op === "=") {
+        cal.clearPendingOp();
     } else {
-        if (op !== "=") {
-            cal.setPendingOp(op);
-            cal.accum = curval;
-        }
+        cal.accum = res;
+        cal.setPendingOp(op);
     }
+
+    displayPrint(res);
+
     cal.setLastButtonType("op");
 }
 
